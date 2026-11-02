@@ -52,6 +52,8 @@ jobs:
       image_suffix: "${{ github.event_name == 'pull_request' && github.event.number || '' }}"
       variables: PYTHON_VERSION=${{ matrix.version }}
   geoip:
+    needs:
+      - debian-fips
     name: geoip
     uses: ./.github/workflows/_reusable-docker-build.yml
     secrets: inherit
