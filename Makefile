@@ -152,4 +152,7 @@ geoip: geoip-name ## Build base image (geoip)
 		-t ${full} \
 		--build-arg="BUILD_IMAGE=${IMAGE_REPO}/${IMAGE_PREFIX}-debian:${DEBIAN_CODENAME}-slim-fips${_generated_suffix}"
 
+geoip-test:
+# stub
+
 test: debian-fips-test xmlsec1-fips-test python-fips-test python-fips-freethreading-test
