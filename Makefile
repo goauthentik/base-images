@@ -25,7 +25,7 @@ PYTHON_VERSION_TAG = ak-fips-${COMMIT}
 # renovate: gh:lsh123/xmlsec
 XMLSEC_VERSION = 1.3.13
 
-all: debian-fips xmlsec1-fips python-fips
+all: debian-fips xmlsec1-fips python-fips geoip
 
 help:  ## Show this help
 	@echo "\nSpecify a command. The choices are:\n"
@@ -137,5 +137,19 @@ python-fips-freethreading-test: python-fips-freethreading-name
 	@echo "### Python freethreading ###"
 	docker run --rm ${full} \
 		python -c "import sys; print('GIL enabled:', sys._is_gil_enabled()); sys.exit(sys._is_gil_enabled())"
+
+geoip-name:
+	$(call image_suffix)
+	$(eval image := ${IMAGE_REPO}/geoip)
+	$(eval full := ${image}:latest${_generated_suffix})
+ifdef GITHUB_OUTPUT
+	@echo image=$(image) >> ${GITHUB_OUTPUT}
+	@echo full=$(full) >> ${GITHUB_OUTPUT}
+endif
+
+geoip: geoip-name ## Build base image (geoip with fips-enabled OpenSSL)
+	docker build ${DOCKER_BUILDX_FLAGS} $@/ \
+		-t ${full} \
+		--build-arg="BUILD_IMAGE=${IMAGE_REPO}/${IMAGE_PREFIX}-debian:${DEBIAN_CODENAME}-slim-fips${_generated_suffix}"
 
 test: debian-fips-test xmlsec1-fips-test python-fips-test python-fips-freethreading-test

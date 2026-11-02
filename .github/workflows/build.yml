@@ -51,3 +51,10 @@ jobs:
       target_name: "python-fips${{ matrix.freethreading }}"
       image_suffix: "${{ github.event_name == 'pull_request' && github.event.number || '' }}"
       variables: PYTHON_VERSION=${{ matrix.version }}
+  geoip:
+    name: geoip
+    uses: ./.github/workflows/_reusable-docker-build.yml
+    secrets: inherit
+    with:
+      target_name: geoip
+      image_suffix: "${{ github.event_name == 'pull_request' && github.event.number || '' }}"
