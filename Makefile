@@ -147,7 +147,7 @@ ifdef GITHUB_OUTPUT
 	@echo full=$(full) >> ${GITHUB_OUTPUT}
 endif
 
-geoip: geoip-name ## Build base image (geoip with fips-enabled OpenSSL)
+geoip: geoip-name ## Build base image (geoip)
 	docker build ${DOCKER_BUILDX_FLAGS} $@/ \
 		-t ${full} \
 		--build-arg="BUILD_IMAGE=${IMAGE_REPO}/${IMAGE_PREFIX}-debian:${DEBIAN_CODENAME}-slim-fips${_generated_suffix}"
