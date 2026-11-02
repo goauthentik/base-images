@@ -1,6 +1,6 @@
-## FIPS Container images
+## Base Container images
 
-[![CI Build status](https://img.shields.io/github/actions/workflow/status/goauthentik/fips/build.yml?branch=main&style=for-the-badge)](https://github.com/goauthentik/fips/actions)
+[![CI Build status](https://img.shields.io/github/actions/workflow/status/goauthentik/base-images/build.yml?branch=main&style=for-the-badge)](https://github.com/goauthentik/base-images/actions)
 
 A collection of container images with a FIPS-enabled OpenSSL build.
 
