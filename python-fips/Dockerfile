@@ -68,6 +68,7 @@ RUN --mount=type=bind,source=patches,target=/usr/src/python-patches \
 		for p in "/usr/src/python-patches/$PYTHON_VERSION"/*.patch; do \
 			patch -p1 < "$p"; \
 		done; \
+		export PYTHON_VERSION_TAG="${PYTHON_VERSION_TAG}+p1"; \
 	fi; \
 	gnuArch="$(dpkg-architecture --query DEB_BUILD_GNU_TYPE)"; \
 	./configure \
