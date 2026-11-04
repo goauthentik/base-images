@@ -29,7 +29,9 @@ RUN set -eux; \
 
 ENV GPG_KEY 7169605F62C751356D054A26A821E680E5FA6305
 
-RUN set -eux; \
+# Patches in patches/<PYTHON_VERSION>/ are applied to that exact version only
+RUN --mount=type=bind,source=patches,target=/usr/src/python-patches \
+	set -eux; \
 	\
 	savedAptMark="$(apt-mark showmanual)"; \
 	apt-get update; \
@@ -48,6 +50,7 @@ RUN set -eux; \
 		libreadline-dev \
 		libsqlite3-dev \
 		make \
+		patch \
 		tk-dev \
 		uuid-dev \
 		wget \
@@ -61,6 +64,12 @@ RUN set -eux; \
 	rm python.tar.xz; \
 	\
 	cd /usr/src/python; \
+	if [ -d "/usr/src/python-patches/$PYTHON_VERSION" ]; then \
+		for p in "/usr/src/python-patches/$PYTHON_VERSION"/*.patch; do \
+			patch -p1 < "$p"; \
+		done; \
+		export PYTHON_VERSION_TAG="${PYTHON_VERSION_TAG}+p1"; \
+	fi; \
 	gnuArch="$(dpkg-architecture --query DEB_BUILD_GNU_TYPE)"; \
 	./configure \
 		--build="$gnuArch" \

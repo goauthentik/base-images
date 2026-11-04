@@ -22,6 +22,8 @@ OPENSSL_VERSION_SUFFIX = ak-fips
 # https://www.python.org/doc/versions/
 PYTHON_VERSION = 3.14.6
 PYTHON_VERSION_TAG = ak-fips-${COMMIT}
+# Docker tags cannot contain "+", so the image uses "-p1" where the build tag uses "+p1"
+PYTHON_PATCH_SUFFIX = $(if $(wildcard python-fips/patches/${PYTHON_VERSION}/*.patch),-p1,)
 # renovate: gh:lsh123/xmlsec
 XMLSEC_VERSION = 1.3.13
 
@@ -89,7 +91,7 @@ xmlsec1-fips-test: xmlsec1-fips-name
 python-fips-name:
 	$(call image_suffix)
 	$(eval image := ${IMAGE_REPO}/${IMAGE_PREFIX}-python)
-	$(eval full := ${image}:${PYTHON_VERSION}-slim-${DEBIAN_CODENAME}-fips${_generated_suffix})
+	$(eval full := ${image}:${PYTHON_VERSION}${PYTHON_PATCH_SUFFIX}-slim-${DEBIAN_CODENAME}-fips${_generated_suffix})
 ifdef GITHUB_OUTPUT
 	@echo image=$(image) >> ${GITHUB_OUTPUT}
 	@echo full=$(full) >> ${GITHUB_OUTPUT}
@@ -113,7 +115,7 @@ python-fips-test: python-fips-name
 python-fips-freethreading-name:
 	$(call image_suffix)
 	$(eval image := ${IMAGE_REPO}/${IMAGE_PREFIX}-python)
-	$(eval full := ${image}:${PYTHON_VERSION}t-slim-${DEBIAN_CODENAME}-fips${_generated_suffix})
+	$(eval full := ${image}:${PYTHON_VERSION}t${PYTHON_PATCH_SUFFIX}-slim-${DEBIAN_CODENAME}-fips${_generated_suffix})
 ifdef GITHUB_OUTPUT
 	@echo image=$(image) >> ${GITHUB_OUTPUT}
 	@echo full=$(full) >> ${GITHUB_OUTPUT}
